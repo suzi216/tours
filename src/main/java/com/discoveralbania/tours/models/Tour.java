@@ -1,0 +1,122 @@
+package com.discoveralbania.tours.models;
+
+import com.discoveralbania.tours.dtos.ItineraryItem;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Where;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "tours", indexes = {
+        @Index(name = "idx_created_at", columnList = "created_at")
+})
+@Where(clause = "deleted_at IS NULL")
+public class Tour extends AuditEntity{
+
+    @Id
+    @Column(nullable = false)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
+
+    // ---------- Basic Info ----------
+    private String title;
+
+    @Column(name = "short_description", length = 500)
+    private String shortDescription;
+
+    @Column(name = "full_description", columnDefinition = "TEXT")
+    private String fullDescription;
+
+    private String category;
+    private String tourType;
+
+    // ---------- Location ----------
+    private String country;
+    private String region;
+    private String city;
+
+    @Column(name = "start_point")
+    private String startPoint;
+
+    @Column(name = "end_point")
+    private String endPoint;
+
+    // ---------- Schedule ----------
+    private String duration;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_available_dates")
+    @Column(name = "date")
+    private List<LocalDate> availableDates;
+
+    // ---------- Pricing ----------
+    private Double pricePerPerson;
+    private Double discount;
+
+    // ---------- Capacity ----------
+    private Integer maxGroupSize;
+    private Integer minGroupSize;
+
+    // ---------- Inclusions / Exclusions ----------
+    @ElementCollection
+    @CollectionTable(name = "tour_inclusions")
+    @Column(name = "inclusion")
+    private List<String> inclusions;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_exclusions")
+    @Column(name = "exclusion")
+    private List<String> exclusions;
+
+    // ---------- Media ----------
+    @Column(name = "cover_image")
+    private String coverImage;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_gallery")
+    @Column(name = "image")
+    private List<String> gallery;
+
+    // ---------- Itinerary ----------
+    @ElementCollection
+    @CollectionTable(name = "tour_itinerary")
+    private List<ItineraryItem> itinerary;
+
+    // ---------- Logistics ----------
+    @Column(name = "pickup_info", columnDefinition = "TEXT")
+    private String pickupInfo;
+
+    @Column(name = "dropoff_info", columnDefinition = "TEXT")
+    private String dropoffInfo;
+
+    private String transportationType;
+
+    // ---------- Guide Info ----------
+    private String guideName;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_guide_languages")
+    @Column(name = "language")
+    private List<String> guideLanguages;
+
+    // ---------- Policies ----------
+    @Column(name = "cancellation_policy", columnDefinition = "TEXT")
+    private String cancellationPolicy;
+
+    @Column(columnDefinition = "TEXT")
+    private String requirements;
+
+    // ---------- System ----------
+    private String slug;
+    private String status; // active / draft
+
+
+}
