@@ -15,13 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/tours")
 @CrossOrigin(origins = {"http://localhost:3000"})
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class TourController {
 
     private final TourService tourService;
-    public TourController(TourService tourService) {
-        this.tourService = tourService;
-    }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TourDto> createTour(@ModelAttribute @Valid TourCreationRequestDto payload){
