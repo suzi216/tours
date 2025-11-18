@@ -40,7 +40,6 @@ public class Tour extends AuditEntity{
 
     // ---------- Location ----------
     private String country;
-    private String region;
     private String city;
 
     @Column(name = "start_point")
@@ -65,24 +64,13 @@ public class Tour extends AuditEntity{
     private Integer maxGroupSize;
     private Integer minGroupSize;
 
-    // ---------- Inclusions / Exclusions ----------
-    @ElementCollection
-    @CollectionTable(name = "tour_inclusions")
-    @Column(name = "inclusion")
-    private List<String> inclusions;
-
-    @ElementCollection
-    @CollectionTable(name = "tour_exclusions")
-    @Column(name = "exclusion")
-    private List<String> exclusions;
-
     // ---------- Media ----------
     @Column(name = "cover_image")
     private String coverImage;
 
     @ElementCollection
     @CollectionTable(name = "tour_gallery")
-    @Column(name = "image")
+    @Column(name = "images")
     private List<String> gallery;
 
     // ---------- Itinerary ----------
@@ -110,13 +98,5 @@ public class Tour extends AuditEntity{
     // ---------- Policies ----------
     @Column(name = "cancellation_policy", columnDefinition = "TEXT")
     private String cancellationPolicy;
-
-    @Column(columnDefinition = "TEXT")
-    private String requirements;
-
-    // ---------- System ----------
-    private String slug;
-    private String status; // active / draft
-
 
 }
