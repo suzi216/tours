@@ -2,8 +2,7 @@ package com.discoveralbania.tours.models;
 
 import com.discoveralbania.tours.dtos.ItineraryItem;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
@@ -14,6 +13,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 @Table(name = "tours", indexes = {
         @Index(name = "idx_created_at", columnList = "created_at")
 })
@@ -29,11 +30,9 @@ public class Tour extends AuditEntity{
     // ---------- Basic Info ----------
     private String title;
 
-    @Column(name = "short_description", length = 500)
-    private String shortDescription;
 
-    @Column(name = "full_description", columnDefinition = "TEXT")
-    private String fullDescription;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     private String category;
     private String tourType;

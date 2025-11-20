@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/tours")
+@RequestMapping("/api/tour")
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RequiredArgsConstructor
 public class TourController {
@@ -30,5 +30,4 @@ public class TourController {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage())).build();
         }
     }
-
 }

@@ -1,6 +1,8 @@
 package com.discoveralbania.tours.dtos;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,10 +18,11 @@ public class TourCreationRequestDto {
     private String city;
     @NotEmpty(message = "Duration is required")
     private String duration;
-    @NotEmpty(message = "Price per person is required")
+    @NotNull
+    @Positive
     private Double pricePerPerson;
     @NotEmpty(message = "Cover image is required")
-    private List<String> coverImage;
+    private String coverImage;
 
     private List<String> gallery, guideLanguages;
 
