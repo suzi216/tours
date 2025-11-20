@@ -8,9 +8,9 @@ import java.util.List;
 
 @Data
 public class TourDto {
-    private String title, description, city, duration, category,tourType;
+    private String title, description, city, duration, category, tourType, coverImage;
     private Double pricePerPerson, discount;
-    private List<String> gallery, guideLanguages, coverImage;
+    private List<String> gallery, guideLanguages;
 
     private List<LocalDate> availableDates;
 
