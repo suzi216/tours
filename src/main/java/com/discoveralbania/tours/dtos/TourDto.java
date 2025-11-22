@@ -1,7 +1,9 @@
 package com.discoveralbania.tours.dtos;
 
+import com.discoveralbania.tours.models.Tour;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,4 +21,8 @@ public class TourDto {
 
     private Integer maxGroupSize, minGroupSize;
     private List<ItineraryItem> itinerary;
+
+    public static TourDto buildFrom(Tour tour) {
+        return new ModelMapper().map(tour, TourDto.class);
+    }
 }

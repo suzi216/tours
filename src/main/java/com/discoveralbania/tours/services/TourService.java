@@ -10,9 +10,12 @@ import com.discoveralbania.tours.utils.FieldUpdater;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,5 +48,20 @@ public class TourService {
         tour.setDeletedAt(new Date());
         tourRepository.save(tour);
 
+    }
+
+    public TourDto getTour(UUID tourId) throws ResourceNotFoundException {
+        Tour tour = tourRepository.findById(tourId).orElseThrow(() -> new ResourceNotFoundException("Tour does not exist"));
+        return new ModelMapper().map(tour, TourDto.class);
+    }
+
+    public Page<TourDto> getToursInfoForPublic(List<String> cities, Pageable pageable) {
+        Page<Tour> tours;
+        if (cities == null || cities.isEmpty()) {
+            tours = tourRepository.findAll(pageable);
+        } else {
+            tours = tourRepository.findAllByCityIn(cities, pageable);
+        }
+        return tours.map(TourDto::buildFrom);
     }
 }

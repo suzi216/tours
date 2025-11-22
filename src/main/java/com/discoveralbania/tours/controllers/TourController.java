@@ -6,6 +6,9 @@ import com.discoveralbania.tours.dtos.TourUpdateRequestDto;
 import com.discoveralbania.tours.exceptions.ResourceNotFoundException;
 import com.discoveralbania.tours.services.TourService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import jakarta.validation.Valid;
@@ -14,6 +17,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -55,6 +59,34 @@ public class TourController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getLocalizedMessage())).build();
+        }
+    }
+
+    @GetMapping("/{tourId}")
+    public ResponseEntity<TourDto> getUniversity(@PathVariable UUID tourId) {
+        try {
+            TourDto responseDto = tourService.getTour(tourId);
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getLocalizedMessage())).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage())).build();
+        }
+    }
+
+    @GetMapping(value = "/public", produces = "application/json")
+    public ResponseEntity<Page<TourDto>> getToursInfoForPublic(
+                                                                            @RequestParam(required = false, value = "city") List<String> cities,
+                                                                            @RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "10") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<TourDto> universities = tourService.getToursInfoForPublic(cities, pageable);
+            return ResponseEntity.ok(universities);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage())).build();
         }
     }
 }
