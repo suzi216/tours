@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tour")
+@RequestMapping("/api/tours")
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RequiredArgsConstructor
 public class TourController {
@@ -63,7 +63,7 @@ public class TourController {
     }
 
     @GetMapping("/{tourId}")
-    public ResponseEntity<TourDto> getUniversity(@PathVariable UUID tourId) {
+    public ResponseEntity<TourDto> getTour(@PathVariable UUID tourId) {
         try {
             TourDto responseDto = tourService.getTour(tourId);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -75,11 +75,10 @@ public class TourController {
         }
     }
 
-    @GetMapping(value = "/public", produces = "application/json")
-    public ResponseEntity<Page<TourDto>> getToursInfoForPublic(
-                                                                            @RequestParam(required = false, value = "city") List<String> cities,
-                                                                            @RequestParam(defaultValue = "0") int page,
-                                                                            @RequestParam(defaultValue = "10") int size) {
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<Page<TourDto>> getToursInfoForPublic(@RequestParam(required = false, value = "city") List<String> cities,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "10") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<TourDto> universities = tourService.getToursInfoForPublic(cities, pageable);

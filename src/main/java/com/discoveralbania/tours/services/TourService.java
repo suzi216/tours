@@ -39,6 +39,7 @@ public class TourService {
 
         FieldUpdater.updateFields(tour, payload, false);
         tour.setId(tourId);
+        tour.setUpdatedAt(new Date());
         tour = tourRepository.save(tour);
         return new ModelMapper().map(tour, TourDto.class);
     }

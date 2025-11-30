@@ -7,9 +7,11 @@ import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class TourDto {
+    private UUID id;
     private String title, description, city, duration, category, tourType, coverImage;
     private Double pricePerPerson, discount;
     private List<String> gallery, guideLanguages;

@@ -18,7 +18,7 @@ public class TourCreationRequestDto {
     private String city;
     @NotEmpty(message = "Duration is required")
     private String duration;
-    @NotNull
+    @NotNull(message = "Price per person is required")
     @Positive
     private Double pricePerPerson;
     @NotEmpty(message = "Cover image is required")
