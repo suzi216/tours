@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        connection:
+          driver_class: org.postgresql.Driver
+  datasource:
+    url: jdbc:postgresql://dpg-d4n1a3ali9vc73f82pfg-a/tours_k90m
+    username: tours_k90m_user
+    password: 8VKYkHDx0PWJXvCrvyLx4bZ5GYILFkir
+    driver-class-name: org.postgresql.Driver
