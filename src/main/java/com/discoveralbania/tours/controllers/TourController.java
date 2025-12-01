@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tours")
-@CrossOrigin(origins = {"http://localhost:3000", "https://tours-ff09.onrender.com" })
+@CrossOrigin(origins = {"http://localhost:3000", "https://toursfrontend.vercel.app" })
 @RequiredArgsConstructor
 public class TourController {
 
