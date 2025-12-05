@@ -67,6 +67,8 @@ public class Tour extends AuditEntity{
     @Column(name = "cover_image")
     private String coverImage;
 
+    private boolean  isPopular;
+
     @ElementCollection
     @CollectionTable(name = "tour_gallery")
     @Column(name = "images")

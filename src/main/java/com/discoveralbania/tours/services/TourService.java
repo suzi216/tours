@@ -48,7 +48,6 @@ public class TourService {
         Tour tour = tourRepository.findById(tourId).orElseThrow(() -> new ResourceNotFoundException("Tour does not exist"));
         tour.setDeletedAt(new Date());
         tourRepository.save(tour);
-
     }
 
     public TourDto getTour(UUID tourId) throws ResourceNotFoundException {
