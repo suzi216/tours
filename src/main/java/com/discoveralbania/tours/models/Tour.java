@@ -1,6 +1,8 @@
 package com.discoveralbania.tours.models;
 
 import com.discoveralbania.tours.dtos.ItineraryItem;
+import com.discoveralbania.tours.enums.CategoryType;
+import com.discoveralbania.tours.enums.Cities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -34,12 +36,12 @@ public class Tour extends AuditEntity{
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String category;
+    private CategoryType category;
     private String tourType;
 
     // ---------- Location ----------
     private String country;
-    private String city;
+    private Cities city;
 
     @Column(name = "start_point")
     private String startPoint;

@@ -3,6 +3,8 @@ package com.discoveralbania.tours.services;
 import com.discoveralbania.tours.dtos.TourCreationRequestDto;
 import com.discoveralbania.tours.dtos.TourDto;
 import com.discoveralbania.tours.dtos.TourUpdateRequestDto;
+import com.discoveralbania.tours.enums.CategoryType;
+import com.discoveralbania.tours.enums.Cities;
 import com.discoveralbania.tours.exceptions.ResourceNotFoundException;
 import com.discoveralbania.tours.models.Tour;
 import com.discoveralbania.tours.repositories.TourRepository;
@@ -59,33 +61,29 @@ public class TourService {
         return new ModelMapper().map(tour, TourDto.class);
     }
 
-    public Page<TourDto> getToursInfoForPublic(List<String> cities, List<String> categories, Pageable pageable) {
+    public Page<TourDto> getToursInfoForPublic(List<Cities> cities, List<CategoryType> categories, Pageable pageable) {
 
         Specification<Tour> spec = (root, query, cb) -> {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            // Cities filter
             if (cities != null && !cities.isEmpty()) {
 
-                CriteriaBuilder.In<String> inClause = cb.in(root.get("city"));
-                for (String city : cities) {
+                CriteriaBuilder.In<Cities> inClause = cb.in(root.get("city"));
+                for (Cities city : cities) {
                     inClause.value(city);
                 }
                 predicates.add(inClause);
             }
 
-            // Categories filter
             if (categories != null && !categories.isEmpty()) {
-                CriteriaBuilder.In<String> inClause = cb.in(root.get("category"));
 
-                for (String category : categories) {
+                CriteriaBuilder.In<CategoryType> inClause = cb.in(root.get("category"));
+                for (CategoryType category : categories) {
                     inClause.value(category);
                 }
-
                 predicates.add(inClause);
             }
-
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 

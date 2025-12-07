@@ -3,6 +3,8 @@ package com.discoveralbania.tours.controllers;
 import com.discoveralbania.tours.dtos.TourCreationRequestDto;
 import com.discoveralbania.tours.dtos.TourDto;
 import com.discoveralbania.tours.dtos.TourUpdateRequestDto;
+import com.discoveralbania.tours.enums.CategoryType;
+import com.discoveralbania.tours.enums.Cities;
 import com.discoveralbania.tours.exceptions.ResourceNotFoundException;
 import com.discoveralbania.tours.services.TourService;
 import lombok.RequiredArgsConstructor;
@@ -76,8 +78,8 @@ public class TourController {
     }
 
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<TourDto>> getToursInfoForPublic(@RequestParam(required = false, value = "city") List<String> cities,
-                                                               @RequestParam(required = false, value = "category") List<String> category,
+    public ResponseEntity<Page<TourDto>> getToursInfoForPublic(@RequestParam(required = false, value = "city") List<Cities> cities,
+                                                               @RequestParam(required = false, value = "category") List<CategoryType> category,
                                                                @RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "10") int size) {
         try {
