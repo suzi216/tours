@@ -7,16 +7,20 @@ import com.discoveralbania.tours.exceptions.ResourceNotFoundException;
 import com.discoveralbania.tours.models.Tour;
 import com.discoveralbania.tours.repositories.TourRepository;
 import com.discoveralbania.tours.utils.FieldUpdater;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -55,13 +59,39 @@ public class TourService {
         return new ModelMapper().map(tour, TourDto.class);
     }
 
-    public Page<TourDto> getToursInfoForPublic(List<String> cities, Pageable pageable) {
-        Page<Tour> tours;
-        if (cities == null || cities.isEmpty()) {
-            tours = tourRepository.findAll(pageable);
-        } else {
-            tours = tourRepository.findAllByCityIn(cities, pageable);
-        }
-        return tours.map(TourDto::buildFrom);
+    public Page<TourDto> getToursInfoForPublic(List<String> cities, List<String> categories, Pageable pageable) {
+
+        Specification<Tour> spec = (root, query, cb) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Cities filter
+            if (cities != null && !cities.isEmpty()) {
+
+                CriteriaBuilder.In<String> inClause = cb.in(root.get("city"));
+                for (String city : cities) {
+                    inClause.value(city);
+                }
+                predicates.add(inClause);
+            }
+
+            // Categories filter
+            if (categories != null && !categories.isEmpty()) {
+                CriteriaBuilder.In<String> inClause = cb.in(root.get("category"));
+
+                for (String category : categories) {
+                    inClause.value(category);
+                }
+
+                predicates.add(inClause);
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<Tour> page = tourRepository.findAll(spec, pageable);
+
+        return page.map(TourDto::buildFrom);
     }
+
 }

@@ -77,11 +77,12 @@ public class TourController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<Page<TourDto>> getToursInfoForPublic(@RequestParam(required = false, value = "city") List<String> cities,
+                                                               @RequestParam(required = false, value = "category") List<String> category,
                                                                @RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "10") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<TourDto> universities = tourService.getToursInfoForPublic(cities, pageable);
+            Page<TourDto> universities = tourService.getToursInfoForPublic(cities, category, pageable);
             return ResponseEntity.ok(universities);
         } catch (Exception e) {
             e.printStackTrace();
