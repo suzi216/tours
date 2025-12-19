@@ -77,7 +77,7 @@ public class TourController {
         }
     }
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value = "/public", produces = "application/json")
     public ResponseEntity<Page<TourDto>> getToursInfoForPublic(@RequestParam(required = false, value = "city") List<Cities> cities,
                                                                @RequestParam(required = false, value = "category") List<CategoryType> category,
                                                                @RequestParam(defaultValue = "0") int page,
