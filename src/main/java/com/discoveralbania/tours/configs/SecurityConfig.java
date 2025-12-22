@@ -2,6 +2,7 @@ package com.discoveralbania.tours.configs;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +27,8 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/tours/public").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 👈 REQUIRED
+                        .requestMatchers("/api/tours/public/**").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
