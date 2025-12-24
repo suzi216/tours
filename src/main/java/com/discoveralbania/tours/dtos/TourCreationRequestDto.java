@@ -1,5 +1,6 @@
 package com.discoveralbania.tours.dtos;
 
+import com.discoveralbania.tours.enums.CategoryType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,7 +31,7 @@ public class TourCreationRequestDto {
 
     private List<LocalDate> availableDates;
 
-    private String category;
+    private CategoryType category;
     private String tourType;
 
     private String country;

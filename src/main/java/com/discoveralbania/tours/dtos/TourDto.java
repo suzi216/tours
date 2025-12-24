@@ -1,5 +1,6 @@
 package com.discoveralbania.tours.dtos;
 
+import com.discoveralbania.tours.enums.CategoryType;
 import com.discoveralbania.tours.models.Tour;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -12,9 +13,10 @@ import java.util.UUID;
 @Data
 public class TourDto {
     private UUID id;
-    private String title, description, city, duration, category, tourType, coverImage;
+    private String title, description, city, duration, tourType, coverImage;
     private Double pricePerPerson, discount;
     private List<String> gallery, guideLanguages;
+    private CategoryType category;
 
     private List<LocalDate> availableDates;
 

@@ -1,5 +1,7 @@
 package com.discoveralbania.tours.dtos;
 
+import com.discoveralbania.tours.enums.CategoryType;
+import com.discoveralbania.tours.enums.Cities;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,7 +11,7 @@ import java.util.List;
 public class TourUpdateRequestDto {
     private String title;
     private String description;
-    private String city;
+    private Cities city;
     private String duration;
     private Double pricePerPerson;
     private String coverImage;
@@ -20,7 +22,7 @@ public class TourUpdateRequestDto {
 
     private List<LocalDate> availableDates;
 
-    private String category;
+    private CategoryType category;
     private String tourType;
 
     private String country;
