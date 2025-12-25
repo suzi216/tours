@@ -1,12 +1,10 @@
 package com.discoveralbania.tours.repositories;
 
-import com.discoveralbania.tours.models.Tour;
+import com.discoveralbania.tours.models.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-
 import java.util.UUID;
 
-public interface TourRepository extends JpaRepository<Tour, UUID>, JpaSpecificationExecutor<Tour> {
-
+public interface ContactRepository extends JpaRepository<Contact, UUID>, JpaSpecificationExecutor<Contact> {
 }

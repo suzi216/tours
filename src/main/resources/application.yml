@@ -17,3 +17,15 @@ spring:
     username: tourdb_e6mg_user
     password: admL57K7Glhq0QAa71trm5SBRc3g87FE
     driver-class-name: org.postgresql.Driver
+    spring:
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: ${BREVO_SMTP_USERNAME}
+    password: ${BREVO_SMTP_API_KEY}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
