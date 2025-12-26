@@ -10,12 +10,9 @@ spring:
         connection:
           driver_class: org.postgresql.Driver
   datasource:
-#    url: jdbc:postgresql://localhost:5432/tourdb
-#    username: postgres
-#    password: A123456
     url: jdbc:postgresql://dpg-d4rahfv5r7bs73f5mno0-a/tourdb_e6mg
-    username: tourdb_e6mg_user
-    password: admL57K7Glhq0QAa71trm5SBRc3g87FE
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
     spring:
   mail:
