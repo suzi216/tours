@@ -14,15 +14,6 @@ spring:
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    spring:
-  mail:
-    host: smtp-relay.brevo.com
-    port: 587
-    username: ${BREVO_SMTP_USERNAME}
-    password: ${BREVO_SMTP_API_KEY}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls.enable: true
-
+  brevo:
+    api-key: ${BREVO_API_KEY}
+    url: https://api.brevo.com/v3/smtp/email

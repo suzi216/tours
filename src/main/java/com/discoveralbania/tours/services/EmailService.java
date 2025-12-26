@@ -1,39 +1,74 @@
 package com.discoveralbania.tours.services;
 
+import com.discoveralbania.tours.dtos.BrevoEmailRequest;
 import com.discoveralbania.tours.dtos.ContactRequestDto;
 import com.discoveralbania.tours.models.Contact;
 import com.discoveralbania.tours.repositories.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
     private final ContactRepository contactRepository;
-    private final JavaMailSender mailSender;
-
+    private final RestTemplate restTemplate;
     private final ModelMapper modelMapper;
-    public void sendContactMessage(ContactRequestDto request) {
-        Contact contact = modelMapper.map(request, Contact.class);
+    private final Environment environment;
+
+    private String getBrevoApiKey() {
+        String apiKey = environment.getProperty("spring.brevo.api-key");
+        return Objects.requireNonNull(apiKey, "Brevo API key must be set in application.yml or environment variable");
+    }
+
+    private String getBrevoUrl() {
+        String url = environment.getProperty("spring.brevo.url");
+        return Objects.requireNonNull(url, "Brevo URL must be set in application.yml");
+    }
+
+    public void sendContactEmail(ContactRequestDto requests) {
+        Contact contact = modelMapper.map(requests, Contact.class);
         contact.setCreatedAt(new Date());
         contact.setCreatedBy(UUID.randomUUID());
         contactRepository.save(contact);
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("suzana.marsela@gmail.com");
-        message.setTo("suzana.marsela@gmail.com");
-        message.setSubject("New Contact Form Message from " + request.getName());
-        message.setText(
-                "Name: " + request.getName() + "\n" +
-                        "Subject: " + request.getSubject() + "\n\n" +
-                        "Email: " + request.getEmail() + "\n\n" +
-                        "Message:\n" + request.getMessage()
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", getBrevoApiKey()); // from env or config
+
+        HttpEntity<BrevoEmailRequest> request = getEmailRequestHttpEntity(requests, headers);
+
+        restTemplate.postForEntity(
+                getBrevoUrl(),
+                request,
+                String.class
         );
-        mailSender.send(message);
+    }
+
+    private static HttpEntity<BrevoEmailRequest> getEmailRequestHttpEntity(ContactRequestDto requests, HttpHeaders headers) {
+        BrevoEmailRequest payload = new BrevoEmailRequest(
+                new BrevoEmailRequest.Sender(
+                        "suzana.marsela@gmail.com",
+                        "Website Contact"
+                ),
+                List.of(new BrevoEmailRequest.To("suzana.marsela@gmail.com")),
+                "New Contact Form Message from " + requests.getName(),
+                "Name: " + requests.getName() + "\n" +
+                        "Subject: " + requests.getSubject() + "\n\n" +
+                        "Email: " + requests.getEmail() + "\n\n" +
+                        "Message:\n" + requests.getMessage()
+        );
+
+        return new HttpEntity<>(payload, headers);
     }
 }

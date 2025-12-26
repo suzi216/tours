@@ -18,12 +18,11 @@ public class ContactController {
     @PostMapping
     public ResponseEntity<String> sendContactMessage(@Valid @RequestBody ContactRequestDto request) {
         try{
-            emailService.sendContactMessage(request);
+            emailService.sendContactEmail(request);
             return ResponseEntity.ok("Email sent");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok("Failed to send email.");
         }
     }
-
 }
