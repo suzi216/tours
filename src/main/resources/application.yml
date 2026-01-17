@@ -10,7 +10,7 @@ spring:
         connection:
           driver_class: org.postgresql.Driver
   datasource:
-    url: jdbc:postgresql://dpg-d5m0i4umcj7s73boolbg-a/tourdb_jaae
+    url: jdbc:postgresql://dpg-d5m0i4umcj7s73boolbg-a:5432/tourdb_jaae
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
