@@ -1,6 +1,7 @@
 package com.discoveralbania.tours.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import java.util.UUID;
@@ -24,6 +25,14 @@ public class Contact extends AuditEntity{
     private String email;
 
     private String subject;
+
+    private Integer days;
+
+    private Integer people;
+
+    private Integer budget;
+
+    private String phone;
 
     @Column(length = 5000)
     private String message;

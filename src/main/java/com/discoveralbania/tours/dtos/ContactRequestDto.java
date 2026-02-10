@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ContactRequestDto {
+public class ContactRequestDto implements EmailRequest{
 
     @NotBlank
     private String name;
@@ -19,4 +19,17 @@ public class ContactRequestDto {
 
     @NotBlank
     private String message;
+
+    @Override
+    public String toEmailSubject() {
+        return "New Contact Form Message from " + name;
+    }
+
+    @Override
+    public String toEmailBody() {
+        return "Name: " + name + "\n" +
+                "Subject: " + subject + "\n\n" +
+                "Email: " + email + "\n\n" +
+                "Message:\n" + message;
+    }
 }

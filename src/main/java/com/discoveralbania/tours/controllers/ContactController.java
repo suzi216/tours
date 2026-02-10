@@ -1,6 +1,7 @@
 package com.discoveralbania.tours.controllers;
 
 import com.discoveralbania.tours.dtos.ContactRequestDto;
+import com.discoveralbania.tours.dtos.CustomTourRequestDto;
 import com.discoveralbania.tours.services.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,21 @@ import org.springframework.web.bind.annotation.*;
 public class ContactController {
 
     private final EmailService emailService;
-
     @PostMapping
-    public ResponseEntity<String> sendContactMessage(@Valid @RequestBody ContactRequestDto request) {
+    public ResponseEntity<String> submitContactForm(@Valid @RequestBody ContactRequestDto request) {
         try{
-            emailService.sendContactEmail(request);
+            emailService.submitContactForm(request);
+            return ResponseEntity.ok("Email sent");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok("Failed to send email.");
+        }
+    }
+
+    @PostMapping(value = "/custom-tour")
+    public ResponseEntity<String> sendCustomTourRequest(@Valid @RequestBody CustomTourRequestDto request) {
+        try{
+            emailService.sendCustomTourRequest(request);
             return ResponseEntity.ok("Email sent");
         } catch (Exception e) {
             e.printStackTrace();

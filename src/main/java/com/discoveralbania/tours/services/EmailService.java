@@ -2,6 +2,8 @@ package com.discoveralbania.tours.services;
 
 import com.discoveralbania.tours.dtos.BrevoEmailRequest;
 import com.discoveralbania.tours.dtos.ContactRequestDto;
+import com.discoveralbania.tours.dtos.CustomTourRequestDto;
+import com.discoveralbania.tours.dtos.EmailRequest;
 import com.discoveralbania.tours.models.Contact;
 import com.discoveralbania.tours.repositories.ContactRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,7 @@ public class EmailService {
         return Objects.requireNonNull(url, "Brevo URL must be set in application.yml");
     }
 
-    public void sendContactEmail(ContactRequestDto requests) {
+    public void submitContactForm(ContactRequestDto requests) {
         Contact contact = modelMapper.map(requests, Contact.class);
         contact.setCreatedAt(new Date());
         contact.setCreatedBy(UUID.randomUUID());
@@ -44,31 +46,47 @@ public class EmailService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("api-key", getBrevoApiKey()); // from env or config
+        headers.set("api-key", getBrevoApiKey());
 
-        HttpEntity<BrevoEmailRequest> request = getEmailRequestHttpEntity(requests, headers);
+        HttpEntity<BrevoEmailRequest> request =
+                getEmailRequestHttpEntity(requests, headers);
 
-        restTemplate.postForEntity(
-                getBrevoUrl(),
-                request,
-                String.class
-        );
+        restTemplate.postForEntity(getBrevoUrl(), request, String.class);
     }
 
-    private static HttpEntity<BrevoEmailRequest> getEmailRequestHttpEntity(ContactRequestDto requests, HttpHeaders headers) {
+    public void sendCustomTourRequest(CustomTourRequestDto requests) {
+        Contact contact = modelMapper.map(requests, Contact.class);
+        contact.setCreatedAt(new Date());
+        contact.setCreatedBy(UUID.randomUUID());
+        contactRepository.save(contact);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", getBrevoApiKey());
+
+        HttpEntity<BrevoEmailRequest> request =
+                getEmailRequestHttpEntity(requests, headers);
+
+        restTemplate.postForEntity(getBrevoUrl(), request, String.class);
+    }
+
+    private static HttpEntity<BrevoEmailRequest> getEmailRequestHttpEntity(
+            EmailRequest requests,
+            HttpHeaders headers
+    ) {
         BrevoEmailRequest payload = new BrevoEmailRequest(
                 new BrevoEmailRequest.Sender(
                         "suzana.marsela@gmail.com",
                         "Website Contact"
                 ),
                 List.of(new BrevoEmailRequest.To("suzana.marsela@gmail.com")),
-                "New Contact Form Message from " + requests.getName(),
-                "Name: " + requests.getName() + "\n" +
-                        "Subject: " + requests.getSubject() + "\n\n" +
-                        "Email: " + requests.getEmail() + "\n\n" +
-                        "Message:\n" + requests.getMessage()
+                requests.toEmailSubject(),
+                requests.toEmailBody()
         );
 
         return new HttpEntity<>(payload, headers);
     }
+
+
+
 }
