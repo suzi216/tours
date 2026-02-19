@@ -77,10 +77,12 @@ public class EmailService {
         BrevoEmailRequest payload = new BrevoEmailRequest(
                 new BrevoEmailRequest.Sender(
                         "suzana.marsela@gmail.com",
-                        "Website Contact"
+                        "Tour Request Information"
                 ),
-                List.of(new BrevoEmailRequest.To("suzana.marsela@gmail.com")),
-                requests.toEmailSubject(),
+                List.of(
+                        new BrevoEmailRequest.To("suzana.marsela@gmail.com"),
+                        new BrevoEmailRequest.To("xheni.dragoni@gmail.com")
+                ),                requests.toEmailSubject(),
                 requests.toEmailBody()
         );
 
