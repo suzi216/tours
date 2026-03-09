@@ -81,7 +81,7 @@ public class EmailService {
                 ),
                 List.of(
                         new BrevoEmailRequest.To("suzana.marsela@gmail.com"),
-                        new BrevoEmailRequest.To("suzana.marsela@icloud.com")
+                        new BrevoEmailRequest.To("xdragoni16@epoka.edu.al")
                 ),                requests.toEmailSubject(),
                 requests.toEmailBody()
         );
