@@ -34,11 +34,11 @@ public class CustomTourRequestDto implements EmailRequest {
 
     @Override
     public String toEmailBody() {
-        return "A new Tour REQUEST from Tourist. All the information below:- \n\n" +
+        return "A new Tour REQUEST from Tourist. All the information below: \n\n" +
                 "Destination: " + destination + "\n" +
-                "Days they want : " + days + "\n" +
+                "Preferred Dates for Trip : " + days + "\n" +
                 "Total number of tourist: " + people + "\n" +
-                "Budget for all: " + budget + "\n" +
+                "Budget for all €: " + budget + "\n" +
                 "Email of contact person: " + email + "\n" +
                 "Phone of contact person: " + phone;
     }
