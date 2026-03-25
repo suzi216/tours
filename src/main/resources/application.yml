@@ -10,9 +10,6 @@ spring:
         connection:
           driver_class: org.postgresql.Driver
   datasource:
-#    url: jdbc:postgresql://localhost:5432/tourdb
-#    username: postgres
-#    password: A123456
     url: jdbc:postgresql://dpg-d724jufpm1nc7389sueg-a:5432/toursdb_64qg
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
