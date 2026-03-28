@@ -22,26 +22,45 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+
     @Bean
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 👈 REQUIRED
-                        .requestMatchers(HttpMethod.GET, "/api/tours/public/**").permitAll()                        .requestMatchers("/api/contact/**").permitAll()
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()          // preflight
+                        .requestMatchers(HttpMethod.GET, "/api/tours/public/**").permitAll() // public GET
+                        .requestMatchers("/api/contact/**", "/api/auth/login").permitAll()   // other public
+                        .anyRequest().authenticated()                                      // everything else needs JWT
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions (for JWT or API tokens)
-                )
-//                .oauth2ResourceServer(oauth2 -> oauth2.jwt()); // Enable Basic Authentication (Optional)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))); // Apply JWT converter
-                // .httpBasic(); // Or just comment the entire oauth2ResourceServer line
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                );
 
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf().disable()
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 👈 REQUIRED
+//                        .requestMatchers(HttpMethod.GET, "/api/tours/public/**").permitAll()                        .requestMatchers("/api/contact/**").permitAll()
+//                        .requestMatchers("/api/auth/login").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions (for JWT or API tokens)
+//                )
+////                .oauth2ResourceServer(oauth2 -> oauth2.jwt()); // Enable Basic Authentication (Optional)
+//                .oauth2ResourceServer(oauth2 -> oauth2
+//                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))); // Apply JWT converter
+//                // .httpBasic(); // Or just comment the entire oauth2ResourceServer line
+//
+//        return http.build();
+//    }
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKey key = Keys.hmacShaKeyFor(
