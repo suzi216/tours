@@ -64,7 +64,7 @@ public class TourController {
         }
     }
 
-    @GetMapping("/{tourId}")
+    @GetMapping("/public/{tourId}")
     public ResponseEntity<TourDto> getTour(@PathVariable UUID tourId) {
         try {
             TourDto responseDto = tourService.getTour(tourId);
