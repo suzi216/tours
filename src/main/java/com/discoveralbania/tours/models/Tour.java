@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,5 +101,17 @@ public class Tour extends AuditEntity{
     // ---------- Policies ----------
     @Column(name = "cancellation_policy", columnDefinition = "TEXT")
     private String cancellationPolicy;
+
+    @PrePersist
+    @PreUpdate
+    public void calculateDuration() {
+        if (availableDates != null && !availableDates.isEmpty()) {
+            LocalDate minDate = availableDates.stream().min(LocalDate::compareTo).get();
+            LocalDate maxDate = availableDates.stream().max(LocalDate::compareTo).get();
+
+            long days = ChronoUnit.DAYS.between(minDate, maxDate) + 1;
+            this.duration = days + " days";
+        }
+    }
 
 }
