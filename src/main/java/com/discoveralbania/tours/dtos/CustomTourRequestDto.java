@@ -42,7 +42,7 @@ public class CustomTourRequestDto implements EmailRequest {
     public String toEmailBody() {
         return "A new Tour REQUEST from Tourist. All the information below: \n\n" +
                 "Destination: " + destination + "\n" +
-                "Preferred Dates for Trip : " + startDate + "-" + endDate + "\n" +
+                "Preferred Dates for Trip : " + startDate + " " + "until" + " " + endDate + "\n" +
                 "Total number of tourist: " + people + "\n" +
                 "Budget for all €: " + budget + "\n" +
                 "Email of contact person: " + email + "\n" +
