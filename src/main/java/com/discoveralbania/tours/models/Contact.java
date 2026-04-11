@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
@@ -32,8 +35,20 @@ public class Contact extends AuditEntity{
 
     private Integer budget;
 
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
     private String phone;
 
     @Column(length = 5000)
     private String message;
+
+    @PrePersist
+    @PreUpdate
+    private void calculateDays() {
+        if (startDate != null && endDate != null) {
+            this.days = (int) ChronoUnit.DAYS.between(startDate, endDate);
+        }
+    }
 }
