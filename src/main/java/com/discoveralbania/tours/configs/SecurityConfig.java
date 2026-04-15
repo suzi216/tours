@@ -21,7 +21,6 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -29,6 +28,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 👈 REQUIRED
+                        .requestMatchers(HttpMethod.POST, "/api/bookings/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/tours/public/**").permitAll()                        .requestMatchers("/api/contact/**").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .anyRequest().authenticated()
