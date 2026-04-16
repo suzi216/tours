@@ -28,8 +28,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 👈 REQUIRED
+                        .requestMatchers(HttpMethod.GET, "/api/tours/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/bookings/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/tours/public/**").permitAll()                        .requestMatchers("/api/contact/**").permitAll()
+                                                .requestMatchers("/api/contact/**").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
