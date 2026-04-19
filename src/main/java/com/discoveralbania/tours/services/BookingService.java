@@ -16,11 +16,14 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
     public void createBooking(BookingRequest request) {
         Booking booking = modelMapper.map(request, Booking.class);
         booking.setCreatedAt(new Date());
         booking.setCreatedBy(UUID.randomUUID());
         bookingRepository.save(booking);
+
+        emailService.createTourBookingRequest(request);
     }
 }

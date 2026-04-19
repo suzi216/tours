@@ -1,9 +1,6 @@
 package com.discoveralbania.tours.services;
 
-import com.discoveralbania.tours.dtos.BrevoEmailRequest;
-import com.discoveralbania.tours.dtos.ContactRequestDto;
-import com.discoveralbania.tours.dtos.CustomTourRequestDto;
-import com.discoveralbania.tours.dtos.EmailRequest;
+import com.discoveralbania.tours.dtos.*;
 import com.discoveralbania.tours.models.Contact;
 import com.discoveralbania.tours.repositories.ContactRepository;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +57,17 @@ public class EmailService {
         contact.setCreatedBy(UUID.randomUUID());
         contactRepository.save(contact);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", getBrevoApiKey());
+
+        HttpEntity<BrevoEmailRequest> request =
+                getEmailRequestHttpEntity(requests, headers);
+
+        restTemplate.postForEntity(getBrevoUrl(), request, String.class);
+    }
+
+    public void createTourBookingRequest(BookingRequest requests) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("api-key", getBrevoApiKey());
