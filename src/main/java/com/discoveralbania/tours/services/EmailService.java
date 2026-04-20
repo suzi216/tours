@@ -114,14 +114,14 @@ public class EmailService {
 
         BrevoEmailRequest payload = new BrevoEmailRequest(
                 new BrevoEmailRequest.Sender(
-                        "your@email.com",
+                        "suzana.marsela@gmail.com",
                         "Discover Albania"
                 ),
                 List.of(
                         new BrevoEmailRequest.To(request.getEmail())
                 ),
                 "Booking Confirmation",
-                htmlContent // same position as body in second method
+                htmlContent
         );
 
         return new HttpEntity<>(payload, headers);
