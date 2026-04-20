@@ -64,6 +64,7 @@ public class BookingRequest implements EmailRequest{
                 "Email: " + email + "\n" +
                 "Phone: " + phone + "\n" +
                 "Address: " + address + "\n" +
+                "Start and End Date" + startDate + " until" + endDate + "\n" +
                 "People: " + people + "\n\n" +
                 "Base Total: €" + baseTotal + "\n" +
                 "Discount: €" + discount + "\n" +
