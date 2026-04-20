@@ -75,9 +75,57 @@ public class EmailService {
         HttpEntity<BrevoEmailRequest> request =
                 getEmailRequestHttpEntity(requests, headers);
 
+        HttpEntity<BrevoEmailRequest> requestCustomer =
+                getEmailCustomerRequestHttpEntity(requests, headers);
+
         restTemplate.postForEntity(getBrevoUrl(), request, String.class);
+        restTemplate.postForEntity(getBrevoUrl(), requestCustomer, String.class);
+
     }
 
+    private HttpEntity<BrevoEmailRequest> getEmailCustomerRequestHttpEntity(
+            BookingRequest request,
+            HttpHeaders headers
+    ) {
+
+        String htmlContent = """
+        <h2>Booking Confirmation</h2>
+        <p>Hi %s,</p>
+        <p>Your booking has been confirmed!</p>
+
+        <h3>Details:</h3>
+        <ul>
+            <li><strong>Tour:</strong> %s</li>
+            <li><strong>Start Date:</strong> %s</li>
+             <li><strong>End Date:</strong> %s</li>
+            <li><strong>Guests:</strong> %d</li>
+        </ul>
+
+        <p>We will contact you shortly.</p>
+        <br/>
+        <p>Best regards,<br/>Discover Albania</p>
+    """.formatted(
+                request.getFullName(),
+                request.getTourTitle(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getPeople()
+        );
+
+        BrevoEmailRequest payload = new BrevoEmailRequest(
+                new BrevoEmailRequest.Sender(
+                        "your@email.com",
+                        "Discover Albania"
+                ),
+                List.of(
+                        new BrevoEmailRequest.To(request.getEmail())
+                ),
+                "Booking Confirmation",
+                htmlContent // same position as body in second method
+        );
+
+        return new HttpEntity<>(payload, headers);
+    }
     private static HttpEntity<BrevoEmailRequest> getEmailRequestHttpEntity(
             EmailRequest requests,
             HttpHeaders headers
