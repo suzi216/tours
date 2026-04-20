@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +32,9 @@ public class Booking extends  AuditEntity{
     private Double baseTotal;
     private Double discount;
     private Double totalAmount;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     private String cardName;
     private String cardLast4;

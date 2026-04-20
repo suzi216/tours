@@ -1,18 +1,39 @@
 package com.discoveralbania.tours.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 public class BookingRequest implements EmailRequest{
 
+    @NotBlank
     private String fullName;
+
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String phone;
     private String address;
+
+    @NotNull
     private int people;
 
+    @NotNull
+    private LocalDate startDate;
+
+    @NotNull
+    private LocalDate endDate;
+
+    @NotNull
     private double baseTotal;
+
     private double discount;
+
+    @NotNull
     private double totalAmount;
 
     private String cardName;
@@ -23,7 +44,10 @@ public class BookingRequest implements EmailRequest{
     private String promoCode;
     private String specialRequests;
 
+    @NotNull
     private boolean agreeTerms;
+
+    @NotBlank
     private String tourId;
     private String tourTitle;
 
