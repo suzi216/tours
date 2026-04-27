@@ -88,29 +88,35 @@ public class EmailService {
             HttpHeaders headers
     ) {
 
-        String htmlContent = """
-        <h2>Booking Confirmation</h2>
-        <p>Hi %s,</p>
-        <p>Your booking has been confirmed!</p>
-
-        <h3>Details:</h3>
-        <ul>
-            <li><strong>Tour:</strong> %s</li>
-            <li><strong>Start Date:</strong> %s</li>
-             <li><strong>End Date:</strong> %s</li>
-            <li><strong>Guests:</strong> %d</li>
-        </ul>
-
-        <p>We will contact you shortly.</p>
-        <br/>
-        <p>Best regards,<br/>Discover Albania</p>
-    """.formatted(
-                request.getFullName(),
-                request.getTourTitle(),
-                request.getStartDate(),
-                request.getEndDate(),
-                request.getPeople()
-        );
+        String htmlContent = """               
+                Hi %s,
+                
+                Details:
+                - Tour: %s
+                - Start: %s
+                - End: %s
+                - Guests: %d
+                - Total: %s
+                
+                What happens next:
+                - We will contact you within 12 hours
+                - You will receive full tour details and pickup info
+                
+                
+                Best regards,
+                Discover Albania
+                
+                If you have any questions, contact us anytime:
+                WhatsApp: +355 673002255
+                Email: info@discoveralbania.com
+                """.formatted(
+                                request.getFullName(),
+                                request.getTourTitle(),
+                                request.getStartDate(),
+                                request.getEndDate(),
+                                request.getPeople(),
+                                request.getTotalAmount()
+                        );
 
         BrevoEmailRequest payload = new BrevoEmailRequest(
                 new BrevoEmailRequest.Sender(
