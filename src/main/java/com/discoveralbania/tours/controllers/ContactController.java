@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/contact")
-@CrossOrigin(origins = {"http://localhost:3000", "https://toursfrontend.vercel.app" })
+@CrossOrigin(origins = {"http://localhost:3000", "https://toursfrontend.vercel.app", "https://www.discover-albania.com/" })
 @RequiredArgsConstructor
 public class ContactController {
 
