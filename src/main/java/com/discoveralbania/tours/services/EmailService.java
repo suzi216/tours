@@ -99,7 +99,7 @@ public class EmailService {
                 - Total: %s
                 
                 What happens next:
-                - We will contact you within 12 hours
+                - We will contact you within 24 hours
                 - You will receive full tour details and pickup info
                 
                 

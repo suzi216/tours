@@ -38,6 +38,6 @@ public class TourCreationRequestDto {
     private String startPoint, endPoint, pickupInfo, transportationType, guideName, cancellationPolicy;
 
     private Integer maxGroupSize, minGroupSize;
-    private List<ItineraryItem> itinerary;
+    private String itinerary;
 
 }

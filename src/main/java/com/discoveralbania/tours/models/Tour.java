@@ -77,9 +77,9 @@ public class Tour extends AuditEntity{
     private List<String> gallery;
 
     // ---------- Itinerary ----------
-    @ElementCollection
-    @CollectionTable(name = "tour_itinerary")
-    private List<ItineraryItem> itinerary;
+    @Lob
+    @Column(name = "itinerary", columnDefinition = "TEXT")
+    private String itinerary;
 
     // ---------- Logistics ----------
     @Column(name = "pickup_info", columnDefinition = "TEXT")
