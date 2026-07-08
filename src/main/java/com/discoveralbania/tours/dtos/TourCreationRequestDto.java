@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,8 +25,9 @@ public class TourCreationRequestDto {
     private Double pricePerPerson;
     @NotEmpty(message = "Cover image is required")
     private String coverImage;
+    private List<MultipartFile> gallery;
 
-    private List<String> gallery, guideLanguages;
+    private List<String> guideLanguages;
 
     private Double discount;
 

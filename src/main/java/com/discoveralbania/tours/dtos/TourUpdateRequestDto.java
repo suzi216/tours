@@ -3,6 +3,7 @@ package com.discoveralbania.tours.dtos;
 import com.discoveralbania.tours.enums.CategoryType;
 import com.discoveralbania.tours.enums.Cities;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,8 +17,8 @@ public class TourUpdateRequestDto {
     private Double pricePerPerson;
     private String coverImage;
 
-    private List<String> gallery, guideLanguages;
-
+    private List<String> guideLanguages;
+    private List<MultipartFile> gallery;
     private Double discount;
 
     private List<LocalDate> availableDates;

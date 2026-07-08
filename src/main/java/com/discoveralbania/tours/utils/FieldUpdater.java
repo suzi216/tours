@@ -1,66 +1,66 @@
 package com.discoveralbania.tours.utils;
 
-import java.lang.reflect.Field;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Field;
+import java.util.Set;
 
 public class FieldUpdater {
 
-    public static void updateFields(Object target, Object source, boolean allowSettingNulls) {
-        Class<?> classA = target.getClass();
-        Class<?> classB = source.getClass();
-
-        for (Field fieldA : classA.getDeclaredFields()) {
-            String targetTypeName = fieldA.getAnnotatedType().getType().getTypeName();
-            if (targetTypeName.endsWith("UploadedFile")) {
-                continue;
-            }
-
-            try {
-                Field fieldB = classB.getDeclaredField(fieldA.getName());
-
-                String sourceTypeName = fieldB.getAnnotatedType().getType().getTypeName();
-                if (sourceTypeName.endsWith("MultipartFile")) {
-                    continue;
-                }
-
-                fieldA.setAccessible(true);
-                fieldB.setAccessible(true);
-                Object value = fieldB.get(source);
-                if (allowSettingNulls || value != null) {
-                    fieldA.set(target, value);
-                }
-
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-        }
-    }
+    // Fields that should never be copied from DTO to Entity
+    private static final Set<String> IGNORED_FIELDS = Set.of(
+            "id",
+            "createdAt",
+            "updatedAt",
+            "deletedAt"
+    );
 
     public static void updateFields(Object target, Object source) {
-        Class<?> classA = target.getClass();
-        Class<?> classB = source.getClass();
+        updateFields(target, source, false);
+    }
 
-        for (Field fieldA : classA.getDeclaredFields()) {
-            String targetTypeName = fieldA.getAnnotatedType().getType().getTypeName();
-            if (targetTypeName.endsWith("UploadedFile")) {
+    public static void updateFields(Object target, Object source, boolean allowSettingNulls) {
+
+        Class<?> targetClass = target.getClass();
+        Class<?> sourceClass = source.getClass();
+
+        for (Field targetField : targetClass.getDeclaredFields()) {
+
+            // Ignore system fields
+            if (IGNORED_FIELDS.contains(targetField.getName())) {
+                continue;
+            }
+
+            Field sourceField;
+
+            try {
+                sourceField = sourceClass.getDeclaredField(targetField.getName());
+            } catch (NoSuchFieldException e) {
+                // DTO simply doesn't contain this field
+                continue;
+            }
+
+            // Skip MultipartFile and List<MultipartFile>
+            String genericType = sourceField.getGenericType().getTypeName();
+
+            if (MultipartFile.class.isAssignableFrom(sourceField.getType())
+                    || genericType.contains("MultipartFile")) {
                 continue;
             }
 
             try {
-                Field fieldB = classB.getDeclaredField(fieldA.getName());
+                targetField.setAccessible(true);
+                sourceField.setAccessible(true);
 
-                String sourceTypeName = fieldB.getAnnotatedType().getType().getTypeName();
-                if (sourceTypeName.endsWith("MultipartFile")) {
-                    continue;
+                Object value = sourceField.get(source);
+
+                if (allowSettingNulls || value != null) {
+                    targetField.set(target, value);
                 }
 
-                fieldA.setAccessible(true);
-                fieldB.setAccessible(true);
-                Object value = fieldB.get(source);
-                fieldA.set(target, value);
-
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(
+                        "Failed to copy field: " + targetField.getName(), e);
             }
         }
     }

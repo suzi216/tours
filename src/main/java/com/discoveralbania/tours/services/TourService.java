@@ -18,11 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -30,24 +32,46 @@ public class TourService {
 
     private final TourRepository tourRepository;
     private final ModelMapper modelMapper;
+    private final CloudinaryService cloudinaryService;
     @Transactional
-    public TourDto createTour(TourCreationRequestDto payload) {
+    public TourDto createTour(TourCreationRequestDto payload) throws IOException {
 
         Tour tour = modelMapper.map(payload, Tour.class);
+        // Upload gallery
+        List<String> galleryUrls = new ArrayList<>();
+
+        if (payload.getGallery() != null) {
+            for (MultipartFile image : payload.getGallery()) {
+                galleryUrls.add(cloudinaryService.uploadImage(image));
+            }
+        }
+
+        tour.setGallery(galleryUrls);
+
         tour.setCreatedAt(new Date());
         tour.setCreatedBy(UUID.randomUUID());
         tour = tourRepository.save(tour);
         return new ModelMapper().map(tour, TourDto.class);
     }
     @Transactional
-    public TourDto updateTour(UUID tourId, TourUpdateRequestDto payload) throws ResourceNotFoundException {
-        Tour tour = tourRepository.findById(tourId).orElseThrow(() -> new ResourceNotFoundException("Tour does not exist"));
+    public TourDto updateTour(UUID tourId, TourUpdateRequestDto payload) throws ResourceNotFoundException, IOException {
 
+        Tour tour = tourRepository.findById(tourId).orElseThrow(() -> new ResourceNotFoundException("Tour does not exist"));
         FieldUpdater.updateFields(tour, payload, false);
-        tour.setId(tourId);
+
+        // Upload new gallery images
+        if (payload.getGallery() != null && !payload.getGallery().isEmpty()) {
+
+            List<String> galleryUrls = tour.getGallery();
+
+            for (MultipartFile image : payload.getGallery()) {
+                galleryUrls.add(cloudinaryService.uploadImage(image));
+            }
+            tour.setGallery(galleryUrls);
+        }
         tour.setUpdatedAt(new Date());
         tour = tourRepository.save(tour);
-        return new ModelMapper().map(tour, TourDto.class);
+        return modelMapper.map(tour, TourDto.class);
     }
 
     public void deleteUniversity(UUID tourId) throws ResourceNotFoundException {
