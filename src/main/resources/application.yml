@@ -1,4 +1,10 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://dpg-d724jufpm1nc7389sueg-a:5432/toursdb_64qg
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -9,15 +15,12 @@ spring:
       hibernate:
         connection:
           driver_class: org.postgresql.Driver
-    datasource:
-      url: jdbc:postgresql://dpg-d724jufpm1nc7389sueg-a:5432/toursdb_64qg
-      username: ${POSTGRES_USERNAME}
-      password: ${POSTGRES_PASSWORD}
-      driver-class-name: org.postgresql.Driver
+
   brevo:
     api-key: ${BREVO_API_KEY}
     url: https://api.brevo.com/v3/smtp/email
+
 cloudinary:
-    cloud-name: ${CLOUDINARY_CLOUD_NAME}
-    api-key: ${CLOUDINARY_API_KEY}
-    api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
