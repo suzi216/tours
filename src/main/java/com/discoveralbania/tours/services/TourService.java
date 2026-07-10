@@ -116,4 +116,22 @@ public class TourService {
         return page.map(TourDto::buildFrom);
     }
 
+    @Transactional
+    public void deleteTourImages(UUID tourId) throws ResourceNotFoundException, IOException {
+
+        Tour tour = tourRepository.findById(tourId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tour does not exist"));
+
+        if (tour.getGallery() != null) {
+            for (String imageUrl : tour.getGallery()) {
+                cloudinaryService.deleteImage(imageUrl);
+            }
+
+            tour.getGallery().clear();
+        }
+
+        tour.setUpdatedAt(new Date());
+        tourRepository.save(tour);
+    }
+
 }

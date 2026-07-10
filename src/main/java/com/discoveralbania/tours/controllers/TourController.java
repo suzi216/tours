@@ -91,4 +91,17 @@ public class TourController {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage())).build();
         }
     }
+    @DeleteMapping("/{tourId}/images")
+// @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'SCOPE_WORKER')")
+    public ResponseEntity<?> deleteTourImages(@PathVariable UUID tourId) {
+        try {
+            tourService.deleteTourImages(tourId);
+            return ResponseEntity.ok().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getLocalizedMessage())).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getLocalizedMessage())).build();
+        }
+    }
 }

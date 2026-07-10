@@ -29,4 +29,12 @@ public class CloudinaryService {
         return uploadResult.get("secure_url").toString();
     }
 
+    public void deleteImage(String imageUrl) throws IOException {
+        String publicId = extractPublicId(imageUrl);
+        cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+    }
+    private String extractPublicId(String imageUrl) {
+        String withoutExtension = imageUrl.substring(0, imageUrl.lastIndexOf('.'));
+        return withoutExtension.substring(withoutExtension.indexOf("/upload/") + 8);
+    }
 }
